@@ -1,1 +1,41 @@
 Hello GitHub!
+
+↓
+
+$owner = "OWNER"
+$repo  = "REPO"
+$path  = "newfile.txt"
+$token = "YOUR_TOKEN"
+
+$contentText = "Hello GitHub!"
+$contentBase64 = [Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes($contentText))
+
+$body = @{
+    message = "Add newfile.txt"
+    content = $contentBase64
+    branch  = "main"
+} | ConvertTo-Json
+
+Invoke-RestMethod `
+  -Method Put `
+  -Uri "https://api.github.com/repos/$owner/$repo/contents/$path" `
+  -Headers @{
+      Authorization = "Bearer $token"
+      Accept        = "application/vnd.github+json"
+  } `
+  -Body $body `
+  -ContentType "application/json"
+
+最短解決手順
+
+GitHub → Settings
+
+Developer settings
+
+Personal access tokens
+
+新しく作成
+
+Contents: Read and write を付与
+
+対象リポジトリを選択
